@@ -1,14 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
+  --background: #ffffff;
+  --foreground: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #000000;
+    --foreground: #ffffff;
+  }
 }
 
 @theme {
   --font-sans: var(--font-space-grotesk);
-  --font-mono: var(--font-jetbrains-mono);
-  --font-geist: var(--font-geist-mono);
+  --font-mono: var(--font-geist-mono);
 }
 
 body {
@@ -41,5 +47,5 @@ body {
 }
 
 .font-mono-technical {
-  font-family: var(--font-geist), monospace;
+  font-family: var(--font-mono), ui-monospace, monospace;
 }

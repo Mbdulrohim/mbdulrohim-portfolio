@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const command = "whoami";
 const outputLines = [
-  { label: "Name", value: "Mbdulrohim" },
+  { label: "Name", value: "Abdulrohim M." },
   {
     label: "Role",
     value: (
@@ -16,7 +16,7 @@ const outputLines = [
         <Link
           href="https://buildpcbs.com"
           target="_blank"
-          className="text-white hover:text-green-400 underline decoration-gray-600 underline-offset-4 transition-colors"
+          className="text-black dark:text-white hover:text-green-600 dark:hover:text-green-400 underline decoration-gray-400 dark:decoration-gray-600 underline-offset-4 transition-colors"
         >
           BuildPCBs
         </Link>
@@ -58,9 +58,9 @@ export function Terminal() {
 
   return (
     <div className="w-full max-w-2xl mx-auto p-4 md:p-0">
-      <div className="w-full bg-black border border-white/20 rounded-md font-mono-technical text-sm shadow-2xl shadow-blue-900/5">
+      <div className="w-full bg-white dark:bg-black border border-black/10 dark:border-white/20 rounded-md font-mono-technical text-sm shadow-2xl shadow-black/5 dark:shadow-blue-900/5">
         {/* Terminal Header */}
-        <div className="flex items-center gap-1.5 px-4 py-3 border-b border-white/10 bg-white/5">
+        <div className="flex items-center gap-1.5 px-4 py-3 border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
           <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
           <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
           <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
@@ -68,12 +68,12 @@ export function Terminal() {
         </div>
 
         {/* Terminal Body */}
-        <div className="p-6 min-h-[300px] text-gray-300 space-y-4">
+        <div className="p-6 min-h-[300px] text-gray-700 dark:text-gray-300 space-y-4">
           {/* Command Line */}
           <div className="flex items-center">
             <span className="text-green-500 mr-2">➜</span>
             <span className="text-blue-400 mr-2">~</span>
-            <span className="text-white">{text}</span>
+            <span className="text-black dark:text-white">{text}</span>
             <span
               className={`ml-1 w-2 h-4 bg-gray-400 ${
                 showCursor ? "opacity-100" : "opacity-0"
@@ -94,7 +94,9 @@ export function Terminal() {
                   <span className="text-gray-500 w-20 shrink-0">
                     {line.label}:
                   </span>
-                  <span className="text-white">{line.value}</span>
+                  <span className="text-black dark:text-white">
+                    {line.value}
+                  </span>
                 </div>
               ))}
 
