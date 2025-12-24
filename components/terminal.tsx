@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import Link from "next/link";
 
-const command = "whoami";
+const command = "whoami"; // standard unix command
 const outputLines = [
   { label: "Name", value: "Abdulrohim M." },
   {
@@ -24,7 +24,7 @@ const outputLines = [
     ),
   },
   { label: "Mission", value: "Building the interface between AI & Hardware" },
-  { label: "Stack", value: "Next.js, Solana, Rust" },
+  { label: "Stack", value: "TypeScript • Solana • Rust" },
 ];
 
 export function Terminal() {
@@ -37,7 +37,7 @@ export function Terminal() {
     let i = 0;
     const interval = setInterval(() => {
       if (i < command.length) {
-        setText((prev) => prev + command.charAt(i));
+        setText(command.slice(0, i + 1));
         i++;
       } else {
         clearInterval(interval);

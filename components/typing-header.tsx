@@ -12,7 +12,7 @@ export function TypingHeader() {
     let i = 0;
     const interval = setInterval(() => {
       if (i < fullText.length) {
-        setText((prev) => prev + fullText.charAt(i));
+        setText(fullText.slice(0, i + 1));
         i++;
       } else {
         clearInterval(interval);
