@@ -1,0 +1,8 @@
+# Cloudflare Pages redirects.
+#
+# Cloudflare serves both the apex and www, and every *.pages.dev preview URL.
+# Left alone, that is the same content on three hostnames: split ranking
+# signals, and Google picking a canonical for you. The site declares
+# https://mbdulrohim.dev as canonical, so everything else must land there.
+
+https://www.mbdulrohim.dev/*  https://mbdulrohim.dev/:splat  301
