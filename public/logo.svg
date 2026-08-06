@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Abdulrohim Mustapha">
+  <!--
+    The mark is an IC package seen from above: body outline, three pins per
+    side, and the pin-1 dot in the top-left that every real chip carries.
+    Copper appears exactly once, as it does everywhere else on the site.
+
+    Letters are geometry, not a text element, so the mark renders identically
+    regardless of installed fonts. A and M are matched at 12 units wide each
+    and centred as a pair on x=32.
+  -->
+  <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+    <!-- Package body -->
+    <rect x="10" y="10" width="44" height="44" />
+
+    <!-- Pins, left and right -->
+    <path d="M4 21h6M4 32h6M4 43h6" />
+    <path d="M54 21h6M54 32h6M54 43h6" />
+
+    <!-- A -->
+    <path d="M18 41 24 24l6 17" />
+    <path d="M20.5 35h7" />
+
+    <!-- M -->
+    <path d="M34 41V24l6 8 6-8v17" />
+  </g>
+
+  <!-- Pin-1 indicator -->
+  <circle cx="16" cy="16" r="1.7" fill="#b0682f" />
+</svg>

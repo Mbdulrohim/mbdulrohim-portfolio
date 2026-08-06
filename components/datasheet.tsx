@@ -8,6 +8,36 @@ import type { ReactNode } from "react";
  * for crawlers, since every fact exists in the initial HTML.
  */
 
+/**
+ * The mark: an IC package with the pin-1 dot. Inlined rather than loaded via
+ * <img> so it inherits `currentColor` and flips with the theme for free.
+ */
+export function Logo({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      className={className}
+      role="img"
+      aria-label="Abdulrohim Mustapha"
+    >
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="square"
+      >
+        <rect x="10" y="10" width="44" height="44" />
+        <path d="M4 21h6M4 32h6M4 43h6" />
+        <path d="M54 21h6M54 32h6M54 43h6" />
+        <path d="M18 41 24 24l6 17" />
+        <path d="M20.5 35h7" />
+        <path d="M34 41V24l6 8 6-8v17" />
+      </g>
+      <circle cx="16" cy="16" r="1.7" className="fill-copper" />
+    </svg>
+  );
+}
+
 /** Numbered section heading with the rule that runs to the page edge. */
 export function Section({
   no,

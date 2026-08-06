@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!--
+    Favicon variant. Deliberately NOT the outlined logo: at 16px an outlined
+    mark collapses into grey mush, so this is a solid tile with the letters
+    knocked out, which is the only thing that stays legible in a tab strip.
+    Pins are dropped for the same reason. The copper pin-1 dot survives
+    because a single spot of colour is what makes a favicon findable.
+
+    Letters are stroked rather than filled: at this weight a filled letterform
+    needs its counters punched correctly, and strokes stay crisp under the
+    aggressive downscaling a favicon gets.
+
+    Colours flip with the browser theme so the tile never disappears into the
+    surrounding browser chrome.
+  -->
+  <style>
+    .tile { fill: #14140f; }
+    .mark { stroke: #f4f1e9; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #e8e5db; }
+      .mark { stroke: #0a0a09; }
+    }
+  </style>
+
+  <rect class="tile" width="64" height="64" />
+
+  <g class="mark" fill="none" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter">
+    <!-- A -->
+    <path d="M14 46 22 20l8 26" />
+    <path d="M17.5 38h9" />
+    <!-- M -->
+    <path d="M34 46V20l8 11 8-11v26" />
+  </g>
+
+  <circle cx="9" cy="9" r="3.2" fill="#b0682f" />
+</svg>
