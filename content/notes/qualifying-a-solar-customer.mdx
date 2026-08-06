@@ -1,0 +1,89 @@
+## Nobody knows what size they need
+
+Ask a customer what solar system they want and the answer is almost never useful.
+They will name a figure they heard from a neighbour, or a budget, or simply say
+they want their house to work when the power goes.
+
+This is not the customer being unhelpful. System size is expressed in units that
+have no meaning outside the industry. Nobody experiences kilowatt-hours. They
+experience the fridge going off, the router dying at nine, and the fan stopping in
+the middle of the night.
+
+So the qualifying conversation is a translation problem. Three questions carry
+almost all of it.
+
+## What do you want to keep running?
+
+This produces the load, and the honest version of the answer is a list of
+appliances, not a number.
+
+The useful technique is to ask what must survive an outage rather than what the
+customer owns. Those are different lists, and the gap between them is usually
+where the budget is won or lost. A customer who says "everything" is describing an
+aspiration; a customer who says "the fridge, the lights, the router and the fan"
+has described a system that can actually be quoted.
+
+Two things reliably distort this list. Air conditioning, which is often assumed
+into the requirement and multiplies the cost of everything downstream. And
+appliances with high starting loads — pumps, compressors, freezers — which draw
+far more at the moment of switching on than their running figure suggests. A
+system sized to running loads will trip the first time the borehole pump starts.
+
+## How long without mains?
+
+This is the question most often skipped, and it determines battery capacity, which
+is usually the largest single cost in the system.
+
+Two customers with identical appliance lists need very different systems depending
+on whether they need four hours of cover in the evening or full overnight
+autonomy. Same load, substantially different battery bank, substantially different
+price.
+
+It also has to be asked about the worst case rather than the typical one. Everyone
+describes their normal outage. The system has to survive the bad week, and the
+customer's tolerance for that bad week is a commercial decision they should be
+making consciously rather than discovering later.
+
+## What can you spend?
+
+Engineers resist putting budget in a technical conversation. It belongs there,
+because budget decides which constraint gives way.
+
+A specification produced without a budget is frequently correct and unsellable.
+The customer sees a number far above what they had in mind, and the conversation
+restarts from zero — except now they have been told the honest answer is
+unaffordable, which makes them more likely to buy something inadequate from
+someone less scrupulous.
+
+Knowing the ceiling early lets the conversation become an explicit trade: this
+budget covers the fridge, lights and router overnight, but not the air
+conditioning. That is a proposal a customer can accept or adjust. It is also
+honest about what the system will not do, which is the thing that prevents the
+angriest possible customer six months later.
+
+## Then, and only then, the catalogue
+
+Once load, runtime and budget are known, specification is largely mechanical:
+load determines inverter capacity, runtime determines storage, budget arbitrates.
+
+The part that must not be mechanical is what fills the specification. A quote is
+only useful if it names equipment the business actually holds, at the price it
+actually sells for in that market. A theoretically correct system built from
+components nobody can source is not a quote — it is a physics exercise.
+
+This is why the assistant in Solar AI selects from the live catalogue rather than
+generating a recommendation from general knowledge. The conversation above is the
+part a language model does genuinely well: asking follow-ups, handling vague
+answers, converting "my fridge, some lights and the TV" into a load profile. What
+it must not do is invent the products or the prices at the end of it.
+
+## The shape of a good qualifying conversation
+
+Three answers, in order, each constraining the next:
+
+- **Load** — what must keep running, with starting loads accounted for
+- **Runtime** — how long without mains, measured against the bad week
+- **Budget** — the ceiling, stated before the specification is built
+
+Everything after that is selection from stock. Everything before it is guesswork
+dressed up as engineering.

@@ -1,0 +1,83 @@
+## The cost people think they are avoiding
+
+The argument for cross-platform is always the same: write once, ship twice, halve
+the cost.
+
+It is a real argument, and for a certain shape of product it is the right one. But
+the arithmetic usually assumes that the expensive part of a mobile app is typing
+the UI code, and that a shared codebase therefore halves the work.
+
+That is not where the cost is. The expensive part is deciding what the app should
+do — the rules, the edge cases, the state transitions, what happens when the
+network drops mid-purchase. If that thinking has been done once and lives
+somewhere both clients can reach, the remaining work is rendering it. And
+rendering is the one thing native platforms are genuinely good at.
+
+## Put the rules on the server
+
+Solar AI ships a Kotlin and Jetpack Compose app on Android, a Swift and SwiftUI
+app on iOS, and a web store, against a single Node, Express and Postgres backend.
+MadeSongs and Suite follow the same shape.
+
+The property that makes this affordable is not the choice of Kotlin or Swift. It
+is that the clients are thin.
+
+Pricing lives on the server. Validation lives on the server. What a quote consists
+of, when an order can be placed, what a subscription entitles someone to, how a
+recommendation is assembled from the catalogue — all server-side. The apps ask
+questions and render answers.
+
+When logic lives there, "writing it twice" means writing two screens that display
+the same JSON. That is a genuinely small task, and it is the task where SwiftUI
+and Compose are each excellent, because both are declarative UI frameworks
+designed for exactly this.
+
+The failure mode is logic leaking into the clients. Once one app decides for
+itself when a discount applies, the two implementations begin to drift, and every
+subsequent change costs twice. But that is an architecture failure. It gets blamed
+on going native, when the same leak would have produced a mess in a shared
+codebase too — just a single mess instead of two.
+
+## What you get back
+
+**Platform behaviour that is correct by default.** Navigation gestures, keyboard
+handling, accessibility, dynamic type, dark mode, share sheets. Native frameworks
+give you the platform's own conventions without effort. Cross-platform frameworks
+approximate them, and the approximation is most visible precisely where users are
+most sensitive.
+
+**Access without waiting.** Camera scanning, background media controls, push
+behaviour, deep linking, in-app purchase. All available immediately rather than
+mediated by a plugin that may or may not be maintained.
+
+**No third abstraction to maintain.** Cross-platform means depending on a layer
+between your code and two platforms that both change annually. When either
+platform ships a breaking change, you wait for the layer to catch up. That wait is
+not in anyone's estimate.
+
+**A longer maintenance life.** Native code written against the platform's own
+frameworks ages roughly as well as the platform does.
+
+## When cross-platform is right
+
+It genuinely often is.
+
+If the team is one or two people, the app is mostly forms and lists, and getting
+to market this quarter matters more than anything else, cross-platform wins
+clearly. If the product is an internal tool where feel is not a competitive
+factor, it wins. If the app is a thin wrapper over a web experience, it wins.
+
+The calculus turns when the product depends on platform capabilities, when it has
+to feel right to a consumer who is comparing it against native apps, or when it
+will be maintained for years. Those are the conditions under which the abstraction
+layer starts costing more than it saved.
+
+## The question worth asking
+
+Not "native or cross-platform", which is a technology argument.
+
+Ask instead: **where do the rules live?** If the answer is "on the server, and
+both clients consume one contract", then going native is a modest incremental
+cost for a materially better product. If the answer is "in the app", then the
+platform choice is the least of the problems, and sharing a codebase will only
+mean sharing the tangle.

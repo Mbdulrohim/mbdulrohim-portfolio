@@ -1,0 +1,87 @@
+## The shift that skipped hardware
+
+Software authoring changed. Editors stopped being places where you type characters
+and became places where you describe intent and review what comes back. Whatever
+one thinks of the result, the interaction model genuinely moved.
+
+Hardware design did not move with it. Board design still runs largely as it did
+before: place components by hand, route by hand, check against design rules, spin
+a revision, wait for a physical board, discover the problem, repeat. The tools are
+capable and mature, and they were built around an interaction model that assumes
+the engineer supplies every decision.
+
+BuildPCBs started from the obvious question. If the editor changed for software,
+what does the equivalent change look like for hardware?
+
+## Why the gap exists
+
+It is not that nobody thought of it. Hardware is harder to assist in ways that
+matter.
+
+**The constraints are physical.** A code suggestion that is wrong produces a test
+failure. A layout suggestion that is wrong produces a board that overheats,
+fails EMC, or cannot be manufactured. The cost of a bad suggestion is measured in
+weeks and fabrication runs rather than in a re-run.
+
+**Correctness is multi-dimensional.** A layout has to satisfy manufacturability,
+thermal behaviour, signal integrity, mechanical fit and component availability
+simultaneously. These constraints trade against each other, and a change that
+improves one routinely degrades another.
+
+**Availability is part of correctness.** A design specifying a component nobody
+can source is not a design. This has no real analogue in software, where the
+library you import is almost always obtainable.
+
+**The feedback loop is slow.** Software gets a compiler in seconds. Hardware gets
+a fabricated board in days or weeks, which means the iteration that makes
+assistance valuable is exactly the iteration hardware cannot afford.
+
+## What AI-native would actually mean
+
+Not a chat window bolted onto an existing tool. That is the version everyone
+builds first, and it produces something that can discuss your design without
+being able to change it.
+
+AI-native means describing intent is a normal way to author. Not "explain this
+net" but "give me the power stage for this current draw, at this thermal budget,
+from parts I can actually buy". The tool holds the constraints and proposes
+something that satisfies them; the engineer reviews, adjusts, and rejects.
+
+The essential property is that the tool has to be far more conservative than a
+code assistant. A code assistant that is confidently wrong wastes minutes. A
+hardware assistant that is confidently wrong wastes a fabrication run. So the
+validation layer matters more than the generation layer — which is the reverse of
+how most AI tooling is built, and the reason this is genuinely hard rather than
+merely unbuilt.
+
+The tractable part is that much of board design is constraint satisfaction against
+known rules. Design rules are already formalised. Manufacturing constraints are
+already published. Component parameters are already structured data. That is an
+unusually good substrate compared to most domains people are pointing models at.
+
+## What it is not
+
+It is not automated design. The engineer remains responsible for the board, and
+any tool implying otherwise is selling something dangerous.
+
+The realistic claim is narrower and more useful: the mechanical parts of the work
+— the placement that follows from a topology, the routing that follows from a
+placement, the sourcing search that follows from a specification — are candidates
+for assistance. The judgement is not.
+
+That division is the same one that made assistance work for software. The
+interesting question was never whether a model can write code. It was which parts
+of the job were mechanical all along.
+
+## Why now
+
+Hardware development has been getting more software-like for years: more
+iteration, smaller teams, faster prototyping, more people designing boards who are
+not career hardware engineers. That last group is the one currently least served,
+because the existing tools assume expertise the user has not accumulated yet.
+
+When BuildPCBs launched, there was nothing doing this. That is a statement about
+timing rather than about difficulty — the constraints above are why, and they have
+not gone away. But the direction seems settled: the question is not whether
+hardware authoring gets AI-native, only what has to be solved before it can be
+trusted with something that gets fabricated.

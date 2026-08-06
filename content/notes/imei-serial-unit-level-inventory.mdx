@@ -1,0 +1,104 @@
+## Two phones, same model, different everything
+
+A shop has two iPhone 13s on the shelf. Same model, same storage, same colour.
+
+One came in new from a distributor at a known cost, with manufacturer warranty
+running. The other was taken in part-exchange last week, has a replaced screen,
+was valued at the counter, and carries whatever guarantee the shop chose to offer.
+
+To an inventory system counting by SKU, those are two units of one line item.
+Quantity: 2. Everything that distinguishes them — cost, condition, warranty,
+provenance — has been discarded at the moment of intake.
+
+That loss is not recoverable later. When one of them comes back with a fault, the
+shop cannot tell which one it sold, what it paid for that unit, or what warranty
+position it is in. When the month's margin is calculated, both units are costed at
+an average that describes neither.
+
+## Identity is the primary key
+
+The fix is to stop treating the model as the unit of inventory. Each physical
+device is its own record, identified by the number stamped on it:
+
+```ts
+interface Device {
+  imeiSerial: string;
+  costPrice: number;
+  targetPrice: number;
+  floorPrice: number;
+}
+```
+
+One field covers both identifier types deliberately. An IMEI identifies a device
+on a mobile network; a serial number identifies a unit to its manufacturer. They
+differ in origin and in what issues them, but for inventory they do the same job:
+uniquely name one physical thing. A shop selling phones, laptops and accessories
+should not need three parallel identity schemes.
+
+Once identity is per-unit, everything that was previously an average becomes a
+fact. This unit cost this much. This unit was sold for that much, to that
+customer, on that date, by that member of staff. Margin stops being a monthly
+estimate and becomes a property of each sale.
+
+## Where it actually pays off
+
+**Warranty and returns.** A customer returns a device three months later. The
+lookup is the IMEI, and it resolves to a specific intake record, a specific
+acquisition, and a specific sale. Without unit identity, the shop is relying on
+the customer's paperwork and the assistant's memory.
+
+**Trade-in valuation.** A device taken in part-exchange has no catalogue price;
+its value came from an assessment at the counter. That valuation has to travel
+with the unit, because when it is resold months later, nobody remembers what was
+given for it. Unit-level records carry it automatically.
+
+**Theft and shrinkage.** SKU counting tells you a unit is missing. Unit-level
+records tell you which one, when it was last seen, who handled it, and what it
+was worth. In a market environment with staff turnover, this is often the entire
+justification on its own.
+
+**Sourcing between traders.** When stock moves between shops, what moves is
+specific units, not quantities of a model. Both sides need to agree on which
+device changed hands and at what price, and that agreement only exists if both
+sides are tracking identity.
+
+## The intake problem
+
+The reason SKU counting persists despite all of this is that unit-level tracking
+costs something at intake, and intake is the busiest, least patient moment in the
+shop.
+
+An IMEI is fifteen digits. Typing it by hand is slow, and worse, it is
+error-prone in a way that stays hidden: a transposed pair of digits produces a
+record that looks fine and fails silently months later, during exactly the
+warranty claim it was supposed to support.
+
+So capture has to be scanned rather than typed. Camera scanning at intake makes
+unit-level identity roughly free at the point where staff would otherwise resist
+it. Any system that requires manual entry of long identifiers will be worked
+around by the people using it, and a partially-populated inventory is arguably
+worse than none, because it looks trustworthy.
+
+## Who is allowed to change identity
+
+Identity fields need to be correctable, because scans occasionally attach to the
+wrong record and devices are occasionally logged twice.
+
+They also need to be correctable by a smaller set of people than can make ordinary
+edits. A sales rep should be able to sell, discount within the band, and take a
+trade-in. Changing the IMEI on an existing record is a different class of action:
+it rewrites the identity that every other record points at.
+
+Splitting the roles — a manager who can revise identity and intake details, a
+sales rep who cannot — keeps the audit trail meaningful. If anyone can rewrite
+identity, then identity is not evidence of anything.
+
+## The general rule
+
+If two units of the same product can differ in cost, condition, or obligation,
+then the product is not the unit of inventory. The unit is.
+
+This holds well beyond phones. Vehicles, industrial equipment, anything
+refurbished, anything with a warranty that starts at a different time per unit.
+The question to ask of any inventory system is simple: when this item comes back
+in six months, will the system know which one it was?

@@ -1,0 +1,86 @@
+## "The app is done"
+
+The build finishes. The team demos it, everything works, and someone asks when it
+can go live.
+
+The honest answer is usually another few weeks, and the reason is that everything
+between a working build and a product people can find has not been started. None
+of it is difficult. Several parts of it have review cycles measured in days, which
+means they cannot be compressed by working harder at the end.
+
+What follows is the list that tends to be discovered rather than planned.
+
+## Two stores, two sets of rules
+
+**Signing and identity.** Both platforms need release signing configured properly,
+and on Android in particular, getting this wrong is close to unrecoverable: lose
+the upload key and you cannot update your own app. This is a first-week task
+pretending to be a launch-week task.
+
+**Release tracks.** Neither store expects you to go straight to everyone.
+TestFlight on iOS and the testing tracks on Play exist so real devices find the
+things emulators do not. Skipping this stage is how you discover a crash on a
+device model you have never held.
+
+**Review.** Human review with a turnaround, and a rejection restarts it.
+Rejections are usually procedural — a missing privacy declaration, an unclear
+permission justification, a login the reviewer cannot get past — and they are
+entirely avoidable by reading the requirements before submitting rather than after
+being rejected.
+
+**Listings.** Screenshots at several device sizes, an icon, a description, a
+category, a privacy policy at a live URL. This is a content task, it takes longer
+than anyone estimates, and it is the first thing a potential user sees.
+
+## People have to find it
+
+The largest misconception is that shipping to two app stores constitutes a
+distribution strategy.
+
+App stores are not search engines. They are effective when someone already knows
+what they are looking for, and largely useless for discovery beyond that. Most
+product discovery begins in a search engine or, increasingly, in an AI assistant,
+and neither of those indexes an app binary.
+
+So the app needs a web surface: a real page describing what it does, in the words
+people use when they have the problem it solves. That page is what gets indexed,
+cited and linked. Store listings almost never rank for anything except the app's
+own name.
+
+For anything selling physical goods, product listings extend the same idea —
+appearing where people search for the product rather than for your brand. And
+whatever web surface exists needs to be registered with search tools, because
+until a site is submitted and indexed it may as well not be published.
+
+## The install boundary loses intent
+
+Someone shares a link to a specific product, or a gift, or an invitation. The
+recipient does not have the app. They install it, open it, and land on a generic
+home screen with no idea what they were sent.
+
+That drop-off is silent, it happens at the exact moment of highest intent, and it
+is invisible in analytics unless you go looking for it.
+
+Deep links that survive installation are what preserve context across that
+boundary. They are also what makes any referral mechanism work at all: a referral
+is only a referral if the person arriving is connected to the person who sent
+them. Retrofitting this after launch is considerably more painful than building it
+in, because by then the sharing surfaces already exist and all of them have to
+change.
+
+## A launch checklist that reflects reality
+
+Ordered by how early it has to start rather than by when it finishes:
+
+- Signing and store accounts — week one, not launch week
+- Privacy policy and data declarations — before the first submission
+- Store listings, screenshots, icon — allow real time, it is content work
+- Internal and external test tracks — before you need them
+- Deep links and referral paths — before the sharing surfaces are built
+- Web presence describing the product — indexed before launch, not after
+- Search and merchant registration — submitted, then verified as indexed
+- Push, analytics, crash reporting — configured in the build that ships
+
+The pattern across all of it: the app is the part with a visible deadline, so it
+gets the attention. Everything on this list has no deadline until it is suddenly
+the only thing standing between a finished build and a product anyone can use.
