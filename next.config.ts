@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
@@ -12,6 +13,10 @@ const nextConfig: NextConfig = {
     // No server means no on-demand image optimization.
     unoptimized: true,
   },
+  // Application notes are authored as MDX pages.
+  pageExtensions: ["ts", "tsx", "mdx"],
 };
 
-export default nextConfig;
+const withMDX = createMDX({});
+
+export default withMDX(nextConfig);

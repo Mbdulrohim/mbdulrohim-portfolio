@@ -158,6 +158,40 @@ export function productSchemas(): Json[] {
   );
 }
 
+/**
+ * TechArticle for an application note.
+ *
+ * `author` points at the same @id as everything else on the site, so each note
+ * reinforces one entity instead of floating free as anonymous content. That
+ * accumulation is what makes the person, not just the page, citable.
+ */
+export function articleSchema(note: {
+  slug: string;
+  title: string;
+  summary: string;
+  published: string;
+  tags: string[];
+}): Json {
+  const url = `${siteConfig.url}/notes/${note.slug}`;
+
+  return clean({
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": `${url}#article`,
+    headline: note.title,
+    description: note.summary,
+    url,
+    datePublished: note.published,
+    dateModified: note.published,
+    inLanguage: "en",
+    keywords: note.tags.join(", "),
+    author: { "@id": ids.person },
+    publisher: { "@id": ids.person },
+    isPartOf: { "@id": ids.website },
+    mainEntityOfPage: url,
+  });
+}
+
 export function websiteSchema(): Json {
   return clean({
     "@context": "https://schema.org",

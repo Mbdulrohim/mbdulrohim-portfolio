@@ -5,7 +5,9 @@ import {
   engagements,
   isPlaceholder,
 } from "@/lib/site-config";
+import { notes } from "@/lib/notes";
 import {
+  Logo,
   Section,
   SpecTable,
   PinGrid,
@@ -33,6 +35,7 @@ const sections = [
   { no: "5", id: "ventures", title: "Ventures" },
   { no: "6", id: "history", title: "Revision History" },
   { no: "7", id: "ordering", title: "Ordering Information" },
+  { no: "8", id: "notes", title: "Application Notes" },
 ];
 
 export default function Home() {
@@ -48,9 +51,12 @@ export default function Home() {
       <header className="sticky top-0 z-20 bg-paper border-b border-rule-strong">
         <div className="mx-auto max-w-4xl px-5 md:px-8">
           <div className="flex items-center justify-between h-11 gap-4">
-            <span className="label text-ink truncate">
+            <span className="flex items-center gap-2.5 label text-ink truncate">
+              <Logo className="w-4 h-4 shrink-0" />
               {siteConfig.handle}
-              <span className="text-ink-faint"> · {siteConfig.jobTitle}</span>
+              <span className="text-ink-faint truncate">
+                · {siteConfig.jobTitle}
+              </span>
             </span>
             <span className="label text-ink-faint shrink-0 tnum">
               REV {REV}
@@ -435,6 +441,37 @@ export default function Home() {
                 <Field label="Region">{location.country}</Field>
               </div>
             </div>
+          </Section>
+
+          {/* ── 8. Application notes ── */}
+          <Section
+            no="8"
+            id="notes"
+            title="Application Notes"
+            aside={`${notes.length} published`}
+          >
+            <ul className="divide-y divide-rule/60 border-t border-rule/60">
+              {notes.map((note) => (
+                <li key={note.slug}>
+                  <Link
+                    href={`/notes/${note.slug}`}
+                    className="block group py-4"
+                  >
+                    <div className="flex items-baseline gap-4">
+                      <span className="label text-ink-faint tnum shrink-0">
+                        {note.no}
+                      </span>
+                      <span className="font-sans font-semibold tracking-tight text-balance group-hover:text-copper transition-colors">
+                        {note.title}
+                      </span>
+                    </div>
+                    <p className="mt-1.5 ml-[3.75rem] text-[0.9375rem] text-ink-muted text-pretty">
+                      {note.summary}
+                    </p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </Section>
         </div>
       </main>
