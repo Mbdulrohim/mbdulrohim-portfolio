@@ -1,0 +1,106 @@
+## The problem with one price per item
+
+Almost every point-of-sale system assumes an item has a price. The customer pays
+it, or they leave.
+
+In Computer Village, Ikeja, that assumption is wrong in a way that breaks the
+software. The listed price is where the conversation starts. A customer who pays
+the asking price without negotiating has, by local standards, made a mistake.
+Sales staff are expected to move on price, several times, within a single
+conversation.
+
+So the shop runs on a number the system does not model. Every assistant carries a
+private sense of how low they can go, learned from the owner and refined by
+experience. That works until the shop has six staff, or until one of them is new,
+or until the owner is not on the floor. Then two things happen: someone sells at a
+loss, or someone loses a sale they could have closed.
+
+The usual fix is a manager override, where the till stops and someone senior
+approves a discount. In a market stall doing dozens of negotiated transactions an
+hour, an override queue is not a workflow. It is a bottleneck that staff will
+route around, usually by writing the sale down on paper.
+
+## Three prices, not one
+
+Suite gives every device three prices instead:
+
+- **Cost price** — what the shop paid. Never shown to the customer.
+- **Target price** — where the assistant opens. The optimistic number.
+- **Floor price** — the lowest the till will accept.
+
+A device might carry a cost of ₦520,000, a target of ₦650,000, and a floor of
+₦610,000. The assistant negotiates anywhere in that ₦40,000 band without asking
+permission, and every outcome inside it is profitable. Below the floor, the sale
+will not complete.
+
+The important property is what the floor is **not**. It is not the cost price.
+Setting the floor at cost would technically prevent losses while still allowing a
+sale that earns nothing, and staff under pressure to close will drift toward it.
+The floor sits above cost by whatever margin the shop needs to survive, so the
+worst permitted outcome is still an acceptable one.
+
+This inverts the usual relationship between the system and the salesperson. A
+conventional POS treats a discount as an exception requiring approval. Here,
+negotiation is the expected behaviour, and the system's job is to bound it rather
+than interrupt it.
+
+## Trade-ins price themselves
+
+Part-exchange is where fixed-price thinking fails hardest. A trade-in device has
+no catalogue price. Its value is whatever was agreed at the counter, based on
+condition, model, and how much the customer wanted the new phone.
+
+Suite prices incoming trade-ins from that agreed valuation rather than from any
+catalogue:
+
+```
+floorPrice = round(tradedInValuation * 1.1)
+```
+
+The device enters stock already carrying its margin. If it was valued at ₦200,000
+against a purchase, its floor becomes ₦220,000, and the same negotiation band
+applies when it is resold. Nobody has to remember what the shop gave for it.
+
+Stock bought wholesale from another trader works the same way, with the floor set
+to what was actually paid. In both cases the rule is the same: the floor derives
+from the real acquisition cost of that specific unit, not from a model-level
+average. This matters because in device retail two identical handsets can enter
+stock at very different costs depending on who they came from.
+
+## The floor has to be audited
+
+A floor price that anyone can edit is not a floor. It is a suggestion.
+
+The failure mode is quiet and predictable. An assistant cannot close a sale, edits
+the floor down by ₦15,000, completes the sale, and the shop never learns that its
+margin moved. Repeat across a few staff over a few months and the pricing model
+has silently degraded into whatever the least disciplined seller decided.
+
+So every price change is recorded as an event with both the old and new values:
+
+```ts
+interface PriceChangeRecord {
+  oldTargetPrice: number;
+  newTargetPrice: number;
+  oldFloorPrice: number;
+  newFloorPrice: number;
+}
+```
+
+Storing the previous value alongside the new one, rather than just the current
+state, is what makes the record useful. The owner can see not only what the floor
+is, but what it was, who moved it, and when. Price becomes an audited entity in
+the system, in the same class as a sale or a payment.
+
+## What this generalises to
+
+The specific numbers are local. The structure is not.
+
+Any market where price is negotiated at the counter has the same shape: a range
+the business can accept, a person authorised to move within it, and a need to
+know afterwards whether the range itself was respected. Vehicle sales, building
+materials, wholesale trade, most B2B contract pricing.
+
+The mistake is treating negotiation as an exception to be approved. If haggling is
+how the market works, then the price band is the real price, and a single number
+per item was never describing the business accurately in the first place.

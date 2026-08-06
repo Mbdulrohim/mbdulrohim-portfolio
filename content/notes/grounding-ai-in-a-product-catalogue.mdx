@@ -1,0 +1,88 @@
+## A good conversation and no order
+
+The default way to add AI to a commerce product is to put a chat window on the
+site and connect it to a general model. The customer describes their problem, the
+assistant answers fluently, and everyone agrees the demo went well.
+
+Then you look at what it actually recommended.
+
+For a solar business in Nigeria, a general model will confidently propose a
+5kW inverter and a panel array, quote figures that look reasonable, and name
+brands from its training data. The problem is not that the answer is wrong in the
+abstract. It is that the company does not stock that inverter, the panels are not
+available at that specification locally, and the prices belong to a different
+market entirely. The customer has been given a shopping list the business cannot
+fill.
+
+That is worse than no assistant, because the customer now has an expectation
+anchored to numbers the sales team has to walk back.
+
+## The assistant should not know anything
+
+The fix is to stop treating the model as a source of knowledge about products.
+
+In Solar AI, the assistant's job is narrow: understand what the customer needs,
+then select from what the company holds. Product identity, specification,
+availability and price all come from the live catalogue at request time. The model
+handles the conversation and the sizing logic. It does not supply a single fact
+about a product.
+
+This sounds like a limitation. In commerce it is the entire value. A
+recommendation is only useful if it terminates in something the business can
+quote, deliver and install. Anything else is a conversation.
+
+The practical test is simple: can the sales team act on the output without
+correcting it? If the assistant recommends a configuration, the team should be
+able to turn it into a quote unchanged. The moment a human has to substitute
+products because the AI named something unavailable, the feature has created work
+rather than removed it.
+
+## Pricing is the part that breaks first
+
+Of everything a model can get wrong, price is the most damaging and the most
+certain to be wrong.
+
+Solar equipment pricing in Nigeria does not resemble the figures a general model
+has absorbed. Import duties, exchange rate movement, local distribution and
+installation labour all move the number substantially. A model asked to price a
+system will produce something plausible and wrong, and plausible-and-wrong is
+harder to catch than obviously-wrong.
+
+So prices are never generated. They are read from the catalogue in local currency
+at the moment of the response. If a price is missing, the correct behaviour is to
+say so and route to a human quote — not to estimate.
+
+The same applies to availability. "We have this in stock" is a claim about the
+present, and only the inventory system can make it.
+
+## Sizing is where the model earns its place
+
+None of this means the AI is doing trivial work.
+
+The genuinely hard part of solar retail is that customers do not know what they
+need. They know their electricity is unreliable, roughly which appliances they
+want to keep running, and roughly what they can spend. Turning that into a load
+profile, and a load profile into a system specification, is the expertise that
+normally requires a sales engineer on a call.
+
+That translation is what the assistant does well: asking the right follow-up
+questions, handling vague answers, converting "my fridge, some lights, and the TV"
+into an energy requirement. It is a conversation problem, which is what the model
+is genuinely good at.
+
+The division holds up: the model owns the conversation and the reasoning, the
+catalogue owns the facts. Neither does the other's job.
+
+## Why this matters beyond the demo
+
+An assistant grounded this way stops being a feature and becomes part of the sales
+pipeline. Its output is a specification tied to real stock, which flows into a
+quote, which flows into an order and an installation schedule.
+
+That connection is the reason to build it at all. The alternative — a chat widget
+that answers questions and hands off nothing — is an expensive way to make a
+website feel modern.
+
+If you are adding AI to a commerce product, the first question is not which model
+to use. It is: what is the source of truth this thing is allowed to speak from,
+and what happens when the answer is not in it?
