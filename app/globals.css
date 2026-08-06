@@ -1,44 +1,155 @@
 @import "tailwindcss";
 
+/*
+ * DESIGN LANGUAGE — COMPONENT DATASHEET
+ *
+ * The page is a technical document, not a landing page. Rules that hold:
+ *  - No border radius. Anywhere. Datasheets are printed on a grid.
+ *  - No box shadows, no gradients, no glass. Hairline rules do the work.
+ *  - Copper is structural, never decorative — it marks live/current state
+ *    and nothing else. Used more than a few times, the concept dies.
+ *  - Monospace carries all labels and data. The grotesk carries only prose.
+ *  - Density is the point. Whitespace comes from the grid, not padding.
+ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
+  /* Paper stock — bone white, not pure white. Pure white reads as "web app". */
+  --paper: #f4f1e9;
+  --paper-inset: #eeeade;
+  --ink: #14140f;
+  /* Both secondary tiers clear WCAG AA (4.5:1) against the paper. The scale
+     is compressed rather than lightened — a datasheet has no throwaway text,
+     so "faint" still has to be readable. */
+  --ink-muted: #5b5951;
+  --ink-faint: #6f6b61;
+  --rule: #cbc5b4;
+  --rule-strong: #14140f;
+  /* Copper trace — the only accent in the system. */
+  --copper: #9c5424;
+  --grid: rgba(20, 20, 15, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #000000;
-    --foreground: #ffffff;
+    /* Board black with silkscreen white — the inverse of the printed sheet. */
+    --paper: #0a0a09;
+    --paper-inset: #121210;
+    --ink: #e8e5db;
+    --ink-muted: #a09b8d;
+    --ink-faint: #837e71;
+    --rule: #2b2a25;
+    --rule-strong: #e8e5db;
+    --copper: #cd8146;
+    --grid: rgba(232, 229, 219, 0.045);
   }
 }
 
-@theme {
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-inset: var(--paper-inset);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-copper: var(--copper);
+
   --font-sans: var(--font-space-grotesk);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Graph paper. Barely visible — it should register as texture, not pattern. */
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-sans), sans-serif;
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  /* Datasheets are set tight. */
+  font-feature-settings: "kern", "liga";
 }
 
-/* Custom Scrollbar */
+/* Technical text: labels, data, part numbers. */
+.mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-feature-settings: "tnum", "zero";
+}
+
+/* Section headings and column headers — small, spaced, uppercase. */
+.label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* Aligns figures in spec tables so decimal columns read cleanly. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Entrance animation. Content is present in the DOM and visible without JS —
+ * only the transform is animated, so crawlers and reduced-motion users get
+ * the finished state immediately.
+ */
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.sheet-in {
+  animation: sheet-in 0.5s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .sheet-in {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Scrollbar follows the paper stock rather than forcing dark. */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000;
+  background: var(--paper);
+  border-left: 1px solid var(--rule);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #222;
-  border-radius: 4px;
+  background: var(--rule);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: var(--ink-faint);
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 /* Utilities */
@@ -46,6 +157,6 @@ body {
   text-wrap: balance;
 }
 
-.font-mono-technical {
-  font-family: var(--font-mono), ui-monospace, monospace;
+.text-pretty {
+  text-wrap: pretty;
 }
