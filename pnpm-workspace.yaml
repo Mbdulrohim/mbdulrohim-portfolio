@@ -1,0 +1,7 @@
+# pnpm blocks dependency build scripts by default (supply-chain protection).
+# These two are transitive deps of Next.js and eslint-config-next, and both
+# need their install script to fetch the correct native binary for this
+# platform — without it, image optimization and ESLint resolution break.
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
