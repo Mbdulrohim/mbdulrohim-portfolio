@@ -51,41 +51,6 @@ export const siteConfig = {
     display: "Ikeja, Lagos",
   },
 
-  // ── The company you run ───────────────────────────────────────────────
-  company: {
-    name: "TODO: registered company name",
-    url: "TODO: company url",
-    /** What it sells, in the words clients would search for. */
-    description: "TODO: company service description",
-    /** RC number from CAC — a real registration signal for E-E-A-T. */
-    registrationId: "TODO: CAC RC number",
-    foundingDate: "TODO: YYYY-MM-DD",
-  },
-
-  // ── Existing venture (already public on the site) ──────────────────────
-  buildpcbs: {
-    name: "BuildPCBs",
-    url: "https://buildpcbs.com",
-    role: "Co-Founder",
-    description: "Building the interface between AI and hardware.",
-    /**
-     * The longer positioning paragraph. This is the section that has to earn
-     * the "first of its kind" claim, so it stays unset until the specifics are
-     * confirmed: an unsupported first-ever claim is the fastest way to lose a
-     * technical reader, and it is exactly the kind of assertion an LLM will
-     * repeat back verbatim.
-     */
-    longDescription:
-      "BuildPCBs is an AI-native environment for hardware development: the equivalent of an AI code editor, but for designing circuit boards. Software engineers gained AI assistance that understands their whole project; hardware engineers largely did not. BuildPCBs brings that same kind of assistance into the PCB design workflow, so the AI works against the real board, its components and its constraints.",
-    /**
-     * Stated as "at launch" rather than an open-ended "only one in the world".
-     * It is the version that stays true over time and survives a sceptical
-     * reader checking it.
-     */
-    differentiator:
-      "At launch there was no comparable tool: AI assistance for hardware design had not been built the way it had for software.",
-  },
-
   // ── Profiles (become schema `sameAs` — how engines confirm identity) ───
   profiles: {
     github: "https://github.com/mbdulrohim",
@@ -111,13 +76,106 @@ export const siteConfig = {
   ],
 } as const;
 
+/**
+ * Companies co-founded.
+ *
+ * One shape for both. These were previously modelled two different ways —
+ * `company` for the registered one and a hardcoded `buildpcbs` key — which was
+ * historical accident, not design, and meant the two rendered differently on
+ * the page for no reason.
+ *
+ * `isRegisteredCompany` marks the one that carries Organization schema, the
+ * CAC registration and the Google Business Profile. Exactly one venture should
+ * set it.
+ */
+export type Venture = {
+  name: string;
+  /** Exactly as registered. Emitted as schema `legalName`. */
+  legalName?: string;
+  url: string;
+  /** Your role: Co-Founder, Founder, and so on. */
+  role: string;
+  /** One line. Renders under the name. */
+  description: string;
+  /** Optional longer positioning paragraph. */
+  longDescription?: string;
+  /** The specific, defensible reason nothing else does this. */
+  differentiator?: string;
+  /** The registered entity: Organization schema, CAC details, the GBP. */
+  isRegisteredCompany?: boolean;
+  registrationId?: string;
+  foundingDate?: string;
+  /** Emitted as an offer catalogue. Each is a service-intent search term. */
+  services?: { name: string; description: string }[];
+  /** Stops engines concluding the company only serves its home country. */
+  areaServedGlobal?: boolean;
+};
+
+export const ventures: Venture[] = [
+  {
+    name: "Copper Ledger",
+    legalName: "Copper Ledger Ltd",
+    url: "https://copperledgerhq.com",
+    role: "Co-Founder",
+    description: "Software products, shipped on Android, iOS and web.",
+    longDescription:
+      "Copper Ledger builds and ships software products: native Android and iOS applications, web platforms, and AI-powered commerce and operations systems. We take products from concept through to release on Google Play and the App Store, and work with clients internationally. Suite is our first product.",
+    isRegisteredCompany: true,
+    registrationId: "TODO: CAC RC number",
+    foundingDate: "TODO: YYYY-MM-DD",
+    areaServedGlobal: true,
+    services: [
+      {
+        name: "Mobile App Development",
+        description:
+          "Native Android and iOS applications in Kotlin and Swift, taken from concept through to release on Google Play and the App Store.",
+      },
+      {
+        name: "Web & Commerce Platforms",
+        description:
+          "Web applications and online stores, built to be found, to sell, and to hold up under real traffic.",
+      },
+      {
+        name: "AI Product Engineering",
+        description:
+          "Assistants grounded in a business's own catalogue, pricing and data, so recommendations become orders rather than conversations.",
+      },
+      {
+        name: "Inventory & Point-of-Sale Systems",
+        description:
+          "Unit-level stock tracking, counter POS, trade-ins and receipts, for retail where every unit differs.",
+      },
+      {
+        name: "Digital & Social Media Marketing",
+        description:
+          "Search visibility and social channels, run so that attention turns into orders.",
+      },
+    ],
+  },
+  {
+    name: "BuildPCBs",
+    url: "https://buildpcbs.com",
+    role: "Co-Founder",
+    description: "Building the interface between AI and hardware.",
+    longDescription:
+      "BuildPCBs is an AI-native environment for hardware development: the equivalent of an AI code editor, but for designing circuit boards. Software engineers gained AI assistance that understands their whole project; hardware engineers largely did not. BuildPCBs brings that same kind of assistance into the PCB design workflow, so the AI works against the real board, its components and its constraints.",
+    // Stated as "at launch" rather than an open-ended "only one in the world".
+    // It is the version that stays true over time and survives a sceptical
+    // reader checking it.
+    differentiator:
+      "At launch there was no comparable tool: AI assistance for hardware design had not been built the way it had for software.",
+  },
+];
+
+/** The registered entity. Drives Organization schema and the Business Profile. */
+export const company = ventures.find((v) => v.isRegisteredCompany);
+
 /** Profile URLs that are real (placeholders stripped) — for schema `sameAs`. */
 export const sameAs: string[] = [
   siteConfig.profiles.github,
   siteConfig.profiles.x,
   siteConfig.profiles.linkedin,
-  siteConfig.buildpcbs.url,
-  siteConfig.company.url,
+  ...ventures.map((v) => v.url),
 ].filter((u) => !isPlaceholder(u));
 
 /**
@@ -301,6 +359,8 @@ export const products: Product[] = [
     // look for "inventory management system" and "POS", not "Suite".
     formalName: "IMS Suite: Inventory Management & Point of Sale",
     partNo: "IMS-100",
+    url: "https://suite.ng",
+    role: "Own product — designed, built and operated by Copper Ledger Ltd",
     platforms: ["Android", "iOS", "Web"],
     description:
       "An IMS Suite for inventory management and point-of-sale, built for high-turnover gadget retail. Tracks stock by IMEI and serial number, runs a counter POS with negotiation floor pricing so staff can haggle without selling below margin, handles trade-in swaps, issues receipts over WhatsApp, and lets traders source stock from each other.",

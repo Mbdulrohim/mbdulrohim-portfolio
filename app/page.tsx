@@ -3,6 +3,8 @@ import {
   siteConfig,
   products,
   engagements,
+  ventures,
+  company,
   isPlaceholder,
 } from "@/lib/site-config";
 import { notes } from "@/lib/notes";
@@ -39,11 +41,11 @@ const sections = [
 ];
 
 export default function Home() {
-  const { location, buildpcbs, company } = siteConfig;
+  const { location } = siteConfig;
+  const buildpcbs = ventures.find((v) => v.name === "BuildPCBs");
   const place = isPlaceholder(location.city)
     ? location.country
     : location.display;
-  const hasCompany = !isPlaceholder(company.name);
 
   return (
     <div className="min-h-screen text-ink">
@@ -138,13 +140,20 @@ export default function Home() {
                 <span className="mono text-[0.9em]">MadeSongs</span>, a
                 cross-platform AI music gifting platform; and{" "}
                 <span className="mono text-[0.9em]">Suite</span>, an inventory
-                and point-of-sale system for high-turnover gadget retail. He is
-                also {buildpcbs.role.toLowerCase()} of{" "}
+                and point-of-sale system for high-turnover gadget retail, and the
+                first product from{" "}
                 <Link
-                  href={buildpcbs.url}
+                  href={company?.url ?? siteConfig.url}
                   className="border-b border-rule-strong hover:text-copper hover:border-copper transition-colors"
                 >
-                  {buildpcbs.name}
+                  {company?.name}
+                </Link>
+                , the company he co-founded. He is also a co-founder of{" "}
+                <Link
+                  href={buildpcbs?.url ?? siteConfig.url}
+                  className="border-b border-rule-strong hover:text-copper hover:border-copper transition-colors"
+                >
+                  {buildpcbs?.name}
                 </Link>
                 .
               </p>
@@ -299,48 +308,52 @@ export default function Home() {
             </div>
           </Section>
 
-          {/* ── 5. Ventures ── */}
-          <Section no="5" id="ventures" title="Ventures">
+          {/* ── 5. Ventures. One shape for both, so neither reads as an
+               afterthought next to the other. ── */}
+          <Section
+            no="5"
+            id="ventures"
+            title="Ventures"
+            aside={`${ventures.length} co-founded`}
+          >
             <div className="space-y-6">
-              <article className="border-b border-rule/60 pb-6">
-                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <h3 className="font-sans text-xl font-bold tracking-tight">
-                    <Link
-                      href={buildpcbs.url}
-                      className="border-b-2 border-rule-strong hover:text-copper hover:border-copper transition-colors"
-                    >
-                      {buildpcbs.name}
-                    </Link>
-                  </h3>
-                  <span className="label">{buildpcbs.role}</span>
-                </div>
+              {ventures.map((venture) => (
+                <article
+                  key={venture.name}
+                  className="border-b border-rule/60 pb-6"
+                >
+                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                    <h3 className="font-sans text-xl font-bold tracking-tight">
+                      <Link
+                        href={venture.url}
+                        className="border-b-2 border-rule-strong hover:text-copper hover:border-copper transition-colors"
+                      >
+                        {venture.name}
+                      </Link>
+                    </h3>
+                    <span className="label">{venture.role}</span>
+                    {venture.legalName && (
+                      <span className="label text-ink-faint ml-auto">
+                        {venture.legalName}
+                      </span>
+                    )}
+                  </div>
 
-                <p className="label mt-2">{buildpcbs.description}</p>
+                  <p className="label mt-2">{venture.description}</p>
 
-                {!isPlaceholder(buildpcbs.longDescription) && (
-                  <p className="mt-4 max-w-2xl leading-relaxed text-pretty">
-                    {buildpcbs.longDescription}
-                  </p>
-                )}
+                  {!isPlaceholder(venture.longDescription) && (
+                    <p className="mt-4 max-w-2xl leading-relaxed text-pretty">
+                      {venture.longDescription}
+                    </p>
+                  )}
 
-                {!isPlaceholder(buildpcbs.differentiator) && (
-                  <p className="mono text-[0.8125rem] text-ink-muted mt-4 max-w-2xl text-pretty">
-                    {buildpcbs.differentiator}
-                  </p>
-                )}
-              </article>
-
-              {hasCompany && (
-                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6 py-3 border-b border-rule/60">
-                  <span className="mono text-[0.9375rem] text-ink sm:w-40 shrink-0">
-                    {company.name}
-                  </span>
-                  <span className="label sm:w-28 shrink-0">Founder</span>
-                  <span className="text-[0.9375rem] text-ink-muted text-pretty">
-                    {company.description}
-                  </span>
-                </div>
-              )}
+                  {!isPlaceholder(venture.differentiator) && (
+                    <p className="mono text-[0.8125rem] text-ink-muted mt-4 max-w-2xl text-pretty">
+                      {venture.differentiator}
+                    </p>
+                  )}
+                </article>
+              ))}
             </div>
           </Section>
 

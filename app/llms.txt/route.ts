@@ -2,6 +2,8 @@ import {
   siteConfig,
   engagements,
   products,
+  ventures,
+  company,
   sameAs,
   isPlaceholder,
 } from "@/lib/site-config";
@@ -26,7 +28,7 @@ function line(label: string, value: string | undefined): string | null {
 }
 
 export function GET() {
-  const { location, company, buildpcbs } = siteConfig;
+  const { location } = siteConfig;
   const displayName = isPlaceholder(siteConfig.legalName)
     ? siteConfig.name
     : siteConfig.legalName;
@@ -55,7 +57,7 @@ export function GET() {
     "",
   ];
 
-  if (!isPlaceholder(company.name)) {
+  if (company) {
     blocks.push(
       "## Company",
       line("Name", company.name),
@@ -90,7 +92,9 @@ export function GET() {
 
   blocks.push(
     "## Ventures",
-    `- **${buildpcbs.name}** (${buildpcbs.url}) · ${buildpcbs.role}. ${buildpcbs.description}`,
+    ...ventures.map(
+      (v) => `- **${v.name}** (${v.url}) · ${v.role}. ${v.description}`,
+    ),
     "",
   );
 

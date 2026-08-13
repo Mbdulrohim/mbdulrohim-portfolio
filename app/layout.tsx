@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 const title = `${siteConfig.name} · ${siteConfig.jobTitle}`;
 const description = isPlaceholder(siteConfig.description)
-  ? `${siteConfig.jobTitle}. ${siteConfig.buildpcbs.role} at ${siteConfig.buildpcbs.name}.`
+  ? `${siteConfig.jobTitle} based in ${siteConfig.location.display}.`
   : siteConfig.description;
 
 export const metadata: Metadata = {

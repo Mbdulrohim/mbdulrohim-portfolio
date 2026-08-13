@@ -14,6 +14,7 @@ import {
   siteConfig,
   engagements,
   products,
+  company,
   sameAs,
   isPlaceholder,
 } from "./site-config";
@@ -40,7 +41,7 @@ const ids = {
 
 /** The central entity. Everything else on the site points back at this. */
 export function personSchema(): Json {
-  const { location, company } = siteConfig;
+  const { location } = siteConfig;
 
   return clean({
     "@context": "https://schema.org",
@@ -77,7 +78,7 @@ export function personSchema(): Json {
       addressRegion: location.region,
       addressCountry: location.countryCode,
     }),
-    worksFor: isPlaceholder(company.name) ? undefined : { "@id": ids.company },
+    worksFor: company ? { "@id": ids.company } : undefined,
     // Past engagements are surfaced as alumniOf so recruiters' knowledge-panel
     // queries resolve against real employers.
     alumniOf: engagements
@@ -94,14 +95,17 @@ export function personSchema(): Json {
 
 /** The company you run. Ranks independently on service-intent queries. */
 export function organizationSchema(): Json | null {
-  const { company, location } = siteConfig;
-  if (isPlaceholder(company.name)) return null;
+  const { location } = siteConfig;
+  if (!company) return null;
+  // Local binding so the narrowing survives into the closures below.
+  const org = company;
 
   return clean({
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": ids.company,
     name: company.name,
+    legalName: company.legalName,
     url: isPlaceholder(company.url) ? siteConfig.url : company.url,
     description: company.description,
     foundingDate: company.foundingDate,
@@ -115,11 +119,42 @@ export function organizationSchema(): Json | null {
       addressRegion: location.region,
       addressCountry: location.countryCode,
     }),
+    // Local entries carry the Business Profile; the global entry stops engines
+    // inferring that a Nigeria-only areaServed means Nigeria-only clients.
     areaServed: [
       clean({ "@type": "City", name: location.city }),
       clean({ "@type": "AdministrativeArea", name: location.region }),
       clean({ "@type": "Country", name: location.country }),
+      ...(company.areaServedGlobal
+        ? [{ "@type": "Place", name: "Worldwide" }]
+        : []),
     ],
+    telephone: siteConfig.phone,
+    email: isPlaceholder(siteConfig.email)
+      ? undefined
+      : `mailto:${siteConfig.email}`,
+    // Each service is its own offer. This is what lets the company surface on
+    // service-intent queries ("social media marketing Lagos") rather than only
+    // on its own name, which nobody is searching for yet.
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `${org.name} services`,
+      itemListElement: (org.services ?? []).map((service) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: service.name,
+          description: service.description,
+          provider: { "@id": ids.company },
+          areaServed: org.areaServedGlobal
+            ? [
+                { "@type": "Country", name: location.country },
+                { "@type": "Place", name: "Worldwide" },
+              ]
+            : { "@type": "Country", name: location.country },
+        },
+      })),
+    },
   });
 }
 
